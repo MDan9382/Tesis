@@ -20,13 +20,13 @@ public class LeccionDao : DaoBase, ILeccionDao
     /// <summary>Lección completa, incluido el contenido (para mostrarla).</summary>
     public Task<Leccion?> ObtenerPorIdAsync(int id, CancellationToken ct = default) =>
         ConsultarUnoAsync(
-            "SELECT Leccion_Id, Leccion_Nombre, Leccion_Contenido, Tema_Id FROM Lecciones WHERE Leccion_Id = @id",
+            "SELECT Leccion_Id, Leccion_Nombre, Leccion_Contenido, Leccion_Orden, Tema_Id FROM Lecciones WHERE Leccion_Id = @id",
             MapearCompleta, [("@id", id)], ct);
 
-    /// <summary>Lecciones de un tema, sin contenido (para menús y listados).</summary>
+    /// <summary>Lecciones de un tema en el orden de la ruta, sin contenido (para menús y listados).</summary>
     public Task<List<LeccionResumen>> ObtenerPorTemaAsync(int temaId, CancellationToken ct = default) =>
         ConsultarAsync(
-            "SELECT Leccion_Id, Leccion_Nombre, Tema_Id FROM Lecciones WHERE Tema_Id = @temaId ORDER BY Leccion_Id",
+            "SELECT Leccion_Id, Leccion_Nombre, Leccion_Orden, Tema_Id FROM Lecciones WHERE Tema_Id = @temaId ORDER BY Leccion_Orden, Leccion_Id",
             MapearResumen, [("@temaId", temaId)], ct);
 
     /// <summary>
@@ -38,7 +38,7 @@ public class LeccionDao : DaoBase, ILeccionDao
         var patron = "%" + EscaparLike(texto.Trim()) + "%";
         return ConsultarAsync(
             """
-            SELECT Leccion_Id, Leccion_Nombre, Tema_Id FROM Lecciones
+            SELECT Leccion_Id, Leccion_Nombre, Leccion_Orden, Tema_Id FROM Lecciones
             WHERE Leccion_Nombre LIKE @patron
             ORDER BY Leccion_Nombre
             LIMIT @limite
@@ -49,8 +49,8 @@ public class LeccionDao : DaoBase, ILeccionDao
     public async Task<int> InsertarAsync(Leccion leccion, CancellationToken ct = default)
     {
         leccion.Id = await InsertarYObtenerIdAsync(
-            "INSERT INTO Lecciones (Leccion_Nombre, Leccion_Contenido, Tema_Id) VALUES (@nombre, @contenido, @temaId)",
-            [("@nombre", leccion.Nombre), ("@contenido", leccion.Contenido), ("@temaId", leccion.TemaId)], ct);
+            "INSERT INTO Lecciones (Leccion_Nombre, Leccion_Contenido, Leccion_Orden, Tema_Id) VALUES (@nombre, @contenido, @orden, @temaId)",
+            [("@nombre", leccion.Nombre), ("@contenido", leccion.Contenido), ("@orden", leccion.Orden), ("@temaId", leccion.TemaId)], ct);
         return leccion.Id;
     }
 
@@ -58,10 +58,10 @@ public class LeccionDao : DaoBase, ILeccionDao
         await EjecutarAsync(
             """
             UPDATE Lecciones
-            SET Leccion_Nombre = @nombre, Leccion_Contenido = @contenido, Tema_Id = @temaId
+            SET Leccion_Nombre = @nombre, Leccion_Contenido = @contenido, Leccion_Orden = @orden, Tema_Id = @temaId
             WHERE Leccion_Id = @id
             """,
-            [("@nombre", leccion.Nombre), ("@contenido", leccion.Contenido),
+            [("@nombre", leccion.Nombre), ("@contenido", leccion.Contenido), ("@orden", leccion.Orden),
              ("@temaId", leccion.TemaId), ("@id", leccion.Id)], ct) > 0;
 
     /// <remarks>Falla (error MySQL 1451) si la lección tiene ejercicios o progreso registrado.</remarks>
@@ -76,6 +76,7 @@ public class LeccionDao : DaoBase, ILeccionDao
         Id = r.GetInt32("Leccion_Id"),
         Nombre = r.GetString("Leccion_Nombre"),
         Contenido = r.GetString("Leccion_Contenido"),
+        Orden = r.GetInt32("Leccion_Orden"),
         TemaId = r.GetInt32("Tema_Id"),
     };
 
@@ -83,6 +84,7 @@ public class LeccionDao : DaoBase, ILeccionDao
     {
         Id = r.GetInt32("Leccion_Id"),
         Nombre = r.GetString("Leccion_Nombre"),
+        Orden = r.GetInt32("Leccion_Orden"),
         TemaId = r.GetInt32("Tema_Id"),
     };
 }

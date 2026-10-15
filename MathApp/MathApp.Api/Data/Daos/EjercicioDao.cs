@@ -7,7 +7,6 @@ public interface IEjercicioDao
 {
     Task<Ejercicio?> ObtenerPorIdAsync(int id, CancellationToken ct = default);
     Task<List<Ejercicio>> ObtenerPorLeccionAsync(int leccionId, bool? esPrueba = null, CancellationToken ct = default);
-    Task<List<Ejercicio>> ObtenerPruebasPorTemaAsync(int temaId, CancellationToken ct = default);
     Task<int> InsertarAsync(Ejercicio ejercicio, CancellationToken ct = default);
     Task<bool> ActualizarAsync(Ejercicio ejercicio, CancellationToken ct = default);
     Task<bool> EliminarAsync(int id, CancellationToken ct = default);
@@ -33,20 +32,6 @@ public class EjercicioDao : DaoBase, IEjercicioDao
             ORDER BY e.Ejercicio_Id
             """,
             Mapear, [("@leccionId", leccionId), ("@esPrueba", esPrueba)], ct);
-
-    /// <summary>
-    /// Ejercicios marcados como prueba de todas las lecciones de un tema. Así se arma
-    /// una prueba que abarca varias lecciones (requisito funcional 4) con el esquema actual.
-    /// </summary>
-    public Task<List<Ejercicio>> ObtenerPruebasPorTemaAsync(int temaId, CancellationToken ct = default) =>
-        ConsultarAsync(
-            $"""
-            SELECT {Columnas} FROM Ejercicios e
-            INNER JOIN Lecciones l ON l.Leccion_Id = e.Leccion_Id
-            WHERE l.Tema_Id = @temaId AND e.Ejercicio_EsPrueba = TRUE
-            ORDER BY e.Leccion_Id, e.Ejercicio_Id
-            """,
-            Mapear, [("@temaId", temaId)], ct);
 
     public async Task<int> InsertarAsync(Ejercicio ejercicio, CancellationToken ct = default)
     {

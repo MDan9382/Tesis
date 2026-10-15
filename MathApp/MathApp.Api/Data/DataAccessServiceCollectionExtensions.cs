@@ -20,6 +20,8 @@ public static class DataAccessServiceCollectionExtensions
         services.AddScoped<IUsuarioPlanDao, UsuarioPlanDao>();
         services.AddScoped<IProgresoLeccionDao, ProgresoLeccionDao>();
         services.AddScoped<IResultadoEjercicioDao, ResultadoEjercicioDao>();
+        services.AddScoped<IPruebaDao, PruebaDao>();
+        services.AddScoped<IResultadoPruebaDao, ResultadoPruebaDao>();
 
         return services;
     }
