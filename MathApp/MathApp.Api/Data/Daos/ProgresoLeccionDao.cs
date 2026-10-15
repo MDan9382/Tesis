@@ -36,7 +36,7 @@ public class ProgresoLeccionDao : DaoBase, IProgresoLeccionDao
             SELECT {Columnas} FROM Progreso_Lecciones p
             INNER JOIN Lecciones l ON l.Leccion_Id = p.Leccion_Id
             WHERE p.Usuario_Id = @usuarioId AND l.Tema_Id = @temaId
-            ORDER BY p.Leccion_Id
+            ORDER BY l.Leccion_Orden, p.Leccion_Id
             """,
             Mapear, [("@usuarioId", usuarioId), ("@temaId", temaId)], ct);
 

@@ -16,6 +16,9 @@ public class Leccion
     [Required]
     public string Contenido { get; set; } = string.Empty;
 
+    /// <summary>Leccion_Orden INT NOT NULL DEFAULT 0. Posición dentro del tema (ruta de aprendizaje).</summary>
+    public int Orden { get; set; }
+
     /// <summary>Tema_Id (FK → Temas).</summary>
     public int TemaId { get; set; }
 }
@@ -28,5 +31,6 @@ public class LeccionResumen
 {
     public int Id { get; set; }
     public string Nombre { get; set; } = string.Empty;
+    public int Orden { get; set; }
     public int TemaId { get; set; }
 }

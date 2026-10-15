@@ -12,6 +12,9 @@ public class Tema
     [Required, StringLength(25)]
     public string Nombre { get; set; } = string.Empty;
 
+    /// <summary>Tema_Orden INT NOT NULL DEFAULT 0. Posición dentro del plan (ruta de aprendizaje).</summary>
+    public int Orden { get; set; }
+
     /// <summary>Plan_Id (FK → Planes_Estudio).</summary>
     public int PlanId { get; set; }
 }

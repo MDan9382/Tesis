@@ -36,8 +36,8 @@ Para que el frontend local pueda llamar a la API, `appsettings.Development.json`
    Railway detecta el `Dockerfile` y `railway.json` automáticamente.
 3. En el mismo proyecto: **+ New → Database → MySQL**.
 4. Crea las tablas: en el servicio MySQL abre la pestaña **Connect**, copia los datos de
-   conexión pública y conéctate con MySQL Workbench. Ejecuta `Db_Tesis_R.sql` y luego
-   `sugerencias_bd.sql`.
+   conexión pública y conéctate con MySQL Workbench. Ejecuta en este orden:
+   `Db_Tesis_R.sql`, `sugerencias_bd.sql` y `cambios_pruebas_y_orden.sql`.
 5. En el servicio de la API, pestaña **Variables**, agrega:
 
    | Variable | Valor |
@@ -80,4 +80,6 @@ public class LeccionesController(ILeccionDao lecciones) : ControllerBase
   dependientes → 409, registro duplicado → 409, referencia a un Id inexistente → 400,
   cualquier otro → 500 (registrado en el log, sin mostrar detalles internos al cliente).
 - `UP_Activo` en NULL se interpreta como `false` (inactivo).
-- `sugerencias_bd.sql` contiene cambios opcionales al esquema.
+- Temas y lecciones se devuelven en el orden de la ruta (`Orden`, y el Id como desempate).
+- Las pruebas (`PruebaDao`) y sus resultados (`ResultadoPruebaDao`) funcionan igual que
+  los ejercicios: cada intento es una fila nueva en `Resultados_Pruebas`.
