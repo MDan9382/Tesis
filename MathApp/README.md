@@ -11,7 +11,10 @@ MathApp.Api/
 │   ├── DataReaderExtensions.cs   Lectura de columnas y NULL
 │   ├── DataAccessServiceCollectionExtensions.cs   AddAccesoDatos(...) para DI
 │   └── Daos/          Un DAO (interfaz + implementación) por tabla
-├── Infraestructura/   Manejo global de errores y health check de MySQL
+├── Controllers/       Endpoints REST (ver tabla abajo)
+├── Dtos/              Cuerpos de petición y respuestas compuestas
+├── Servicios/         UsuarioActual: el usuario del token de Firebase
+├── Infraestructura/   Autenticación Firebase, manejo de errores, health check
 └── Program.cs         DAOs, CORS, /health, puerto de Railway, cabeceras del proxy
 Dockerfile, railway.json   Despliegue en Railway
 ```
@@ -56,22 +59,56 @@ Cada `git push` a la rama principal vuelve a desplegar. Railway espera a que `/h
 responda bien antes de cambiar el tráfico a la versión nueva, así un despliegue roto no
 tumba el que ya funcionaba. Los logs de la API se ven en la pestaña **Deployments**.
 
-## Uso en un controlador
+## Autenticación
 
-```csharp
-[ApiController]
-[Route("api/lecciones")]
-public class LeccionesController(ILeccionDao lecciones) : ControllerBase
-{
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<Leccion>> Obtener(int id, CancellationToken ct) =>
-        await lecciones.ObtenerPorIdAsync(id, ct) is { } l ? l : NotFound();
+El frontend inicia sesión con Firebase y manda el ID token en cada petición:
 
-    [HttpGet("buscar")]
-    public Task<List<LeccionResumen>> Buscar(string q, CancellationToken ct) =>
-        lecciones.BuscarPorNombreAsync(q, ct: ct);
-}
+```js
+const token = await auth.currentUser.getIdToken(); // Firebase lo renueva solo
+const res = await fetch(`${API}/api/yo`, {
+  headers: { Authorization: `Bearer ${token}` },
+});
 ```
+
+La API valida el token contra el proyecto `tesis-mate-app` (configurado en
+`appsettings.json` → `Firebase:ProjectId`). Toda la API exige token excepto `/health`.
+El usuario se identifica **solo** por el token: los cuerpos de las peticiones nunca
+llevan `usuarioId`. La primera llamada a `GET /api/yo` registra al usuario en la tabla
+`Usuarios`.
+
+Para probar en Swagger: inicia sesión en el frontend, copia el token
+(`await auth.currentUser.getIdToken()` en la consola del navegador) y pégalo en el
+botón **Authorize**.
+
+## Endpoints
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/health` | Estado de la API y MySQL (sin token) |
+| GET | `/api/yo` | Usuario actual (lo registra la primera vez) |
+| PUT | `/api/yo/nombre` | Cambiar nombre `{ "nombre": "Ana" }` |
+| GET | `/api/yo/perfil` | Planes activos, lecciones completadas y resultados |
+| GET | `/api/yo/planes?soloActivos=true` | Planes del usuario |
+| POST / DELETE | `/api/yo/planes/{planId}` | Activar / desactivar un plan |
+| GET | `/api/planes` | Planes de estudio |
+| GET | `/api/planes/{id}` | Un plan |
+| GET | `/api/planes/{id}/temas` | Temas del plan en orden de ruta |
+| GET | `/api/temas/{id}` | Un tema |
+| GET | `/api/temas/{id}/lecciones` | Ruta del tema: lecciones en orden con `completada` |
+| GET | `/api/temas/{id}/pruebas?esPrueba=` | Pruebas del tema |
+| GET | `/api/lecciones/buscar?q=texto` | Búsqueda por nombre (mín. 2 letras) |
+| GET | `/api/lecciones/{id}` | Lección con contenido |
+| GET | `/api/lecciones/{id}/ejercicios` | Ejercicios de la lección |
+| POST | `/api/lecciones/{id}/completar` | Marcar lección como completada |
+| GET | `/api/ejercicios/{id}` | Un ejercicio |
+| POST | `/api/ejercicios/{id}/resultados` | Guardar intento `{ "puntaje": 80 }` (0–100) |
+| GET | `/api/ejercicios/{id}/resultados` | Mis intentos y mejor puntaje |
+| GET | `/api/pruebas/{id}` | Una prueba |
+| POST | `/api/pruebas/{id}/resultados` | Guardar intento `{ "puntaje": 80 }` (0–100) |
+| GET | `/api/pruebas/{id}/resultados` | Mis intentos y mejor puntaje |
+
+Respuestas de error: 401 sin token o token inválido, 404 si el recurso no existe,
+400 si los datos no son válidos (detalle en formato ProblemDetails).
 
 ## Notas
 
