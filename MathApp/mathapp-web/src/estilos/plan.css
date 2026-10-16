@@ -1,0 +1,154 @@
+/* Módulo de Plan de estudio — basado en el prototipo */
+.lista-planes { display: flex; flex-direction: column; gap: 12px; }
+
+.plan {
+  border: 1px solid var(--azul-borde);
+  border-radius: var(--radio);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--sombra);
+}
+
+.plan-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 20px;
+  background: #fff;
+  transition: background 0.2s;
+}
+.plan-header.abierto { background: var(--azul-fondo); }
+
+.plan-expandir {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0 16px 20px;
+  background: none;
+  border: none;
+  text-align: left;
+}
+.plan-textos { display: flex; flex-direction: column; min-width: 0; }
+.plan-titulo {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--azul-fuerte);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.plan-descripcion {
+  font-size: 13px;
+  color: var(--gris-texto);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chevron {
+  color: var(--azul-medio);
+  display: flex;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+.chevron.abierto { transform: rotate(180deg); }
+
+/* Interruptor */
+.toggle-wrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.toggle-label { font-size: 12px; font-weight: 500; color: var(--gris-suave); transition: color 0.2s; }
+.toggle-label.activo { color: var(--verde); }
+
+.interruptor {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 100px;
+  background: #D1D5DB;
+  transition: background 0.25s;
+}
+.interruptor.encendido { background: var(--verde-claro); }
+.interruptor-perilla {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform 0.25s;
+}
+.interruptor.encendido .interruptor-perilla { transform: translateX(18px); }
+.interruptor:disabled { opacity: 0.6; }
+
+/* Contenido desplegable */
+.plan-contenido { border-top: 1px solid var(--azul-borde); }
+.plan-aviso { padding: 10px 20px; }
+
+.tema-wrap { border-bottom: 1px solid #F1F5FE; }
+.tema-wrap:last-child { border-bottom: none; }
+
+.tema-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px 12px 32px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  transition: background 0.15s;
+}
+.tema-header:hover { background: var(--fondo); }
+.tema-header.abierto { background: #F0F9FF; }
+.tema-titulo { font-size: 13px; font-weight: 600; color: var(--azul); }
+.tema-derecha { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.tema-conteo { font-size: 12px; font-weight: 500; color: var(--gris-suave); }
+.tema-chevron { color: var(--azul-claro); display: flex; transition: transform 0.2s; }
+.tema-chevron.abierto { transform: rotate(180deg); }
+
+/* Lecciones */
+.lecciones-lista { padding: 4px 0 10px; }
+.lecciones-lista ul { list-style: none; }
+.leccion-fila { display: flex; align-items: center; gap: 10px; padding: 8px 20px 8px 52px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--azul-claro); flex-shrink: 0; margin: 0 4px; }
+.marca-completada {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--verde-claro);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.marca-completada svg { width: 9px; height: 9px; }
+.leccion-nombre { font-size: 13px; color: var(--gris-oscuro); text-decoration: none; }
+a.leccion-nombre:hover { color: var(--azul); text-decoration: underline; }
+.leccion-fila.completada .leccion-nombre { color: var(--gris-texto); }
+
+.vacio { font-size: 13px; color: var(--gris-suave); padding: 12px 20px 12px 32px; }
+.vacio-leccion { padding-left: 52px; }
+
+/* Carga */
+.esqueleto { height: 70px; background: linear-gradient(90deg, #fff 0%, var(--azul-fondo) 50%, #fff 100%); background-size: 200% 100%; animation: brillo 1.4s ease-in-out infinite; }
+@keyframes brillo { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@media (prefers-reduced-motion: reduce) { .esqueleto { animation: none; } }
+
+@media (max-width: 520px) {
+  .plan-expandir { padding-left: 14px; }
+  .plan-header { padding-right: 14px; gap: 8px; }
+  .plan-titulo { font-size: 14px; }
+  .tema-header { padding-left: 24px; padding-right: 14px; }
+  .leccion-fila { padding-left: 40px; padding-right: 14px; }
+  .vacio { padding-left: 24px; }
+  .vacio-leccion { padding-left: 40px; }
+  .toggle-label { display: none; } /* en celular basta el interruptor */
+}
