@@ -1,6 +1,8 @@
 using MathApp.Api.Data;
 using MathApp.Api.Infraestructura;
+using MathApp.Api.Servicios;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,11 @@ var cadenaConexion = builder.Configuration.GetConnectionString("MathApp")
     ?? throw new InvalidOperationException("Falta la cadena de conexión 'ConnectionStrings:MathApp'.");
 
 builder.Services.AddAccesoDatos(cadenaConexion);
+
+// Autenticación con Firebase: toda la API exige token salvo /health.
+builder.Services.AddAutenticacionFirebase(builder.Configuration["Firebase:ProjectId"] ?? "");
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUsuarioActual, UsuarioActual>();
 
 // Errores → JSON con código HTTP adecuado + registro en log.
 builder.Services.AddProblemDetails();
@@ -41,7 +48,28 @@ builder.Services.Configure<ForwardedHeadersOptions>(o =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    // Botón "Authorize" en Swagger para probar con un token de Firebase.
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Pega aquí el ID token de Firebase (sin la palabra Bearer).",
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" },
+            },
+            Array.Empty<string>()
+        },
+    });
+});
 
 var app = builder.Build();
 
@@ -56,9 +84,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health").AllowAnonymous();
 app.MapControllers();
 
 app.Run();
