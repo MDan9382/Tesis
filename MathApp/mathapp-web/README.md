@@ -12,7 +12,7 @@ React + Vite, con inicio de sesión de Firebase (Google y correo/contraseña).
    Consola de Firebase → ⚙ Configuración del proyecto → *Tus apps* → tu app web →
    `firebaseConfig`. Solo hacen falta `apiKey` y `appId`; el resto ya está puesto.
 3. Pon en `VITE_API_URL` la dirección del backend (la que muestra Visual Studio al
-   ejecutar la API, p. ej. `http://localhost:5000`).
+   ejecutar la API, p. ej. `http://localhost:5225`).
 4. Arranca:
    ```bash
    npm run dev
