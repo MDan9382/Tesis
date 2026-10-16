@@ -80,8 +80,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseHttpsRedirection(); // en Railway el HTTPS lo maneja su proxy
 }
+// Sin UseHttpsRedirection: redirigir la petición previa de CORS (OPTIONS) hace que
+// el navegador la bloquee. En Railway el HTTPS lo pone su proxy.
 
 app.UseCors();
 app.UseAuthentication();
