@@ -66,9 +66,12 @@ src/
 │   ├── AuthContext.jsx    Sesión: entrar, registrarse, recuperar contraseña, salir
 │   ├── RutaProtegida.jsx  Manda a /entrar a quien no tiene sesión
 │   └── erroresFirebase.js Mensajes de error en español
-├── componentes/           Barra superior (Layout), pantallas de carga y error
+├── componentes/           Barra superior (Layout), interruptor, íconos, errores
 ├── paginas/
 │   ├── Entrar.jsx         Inicio de sesión / crear cuenta / recuperar contraseña
+│   ├── PlanEstudio.jsx    Activar planes y ver sus temas y lecciones
+│   ├── Lecciones.jsx      Temas de los planes activos y buscador de lecciones
+│   └── LeccionVista.jsx   Lección en Markdown con fórmulas; se completa al terminarla
 │   └── Proximamente.jsx   Lugar temporal de los módulos que faltan
 └── estilos/               Colores y componentes tomados de los prototipos
 ```
@@ -86,6 +89,34 @@ await api("/api/lecciones/3/completar", { metodo: "POST" });
 
 `api()` agrega el token automáticamente y lanza un `ErrorApi` con un mensaje en
 español si algo falla (`error.message`, `error.estado`).
+
+## Cómo escribir el contenido de una lección
+
+`Leccion_Contenido` se escribe en **Markdown**:
+
+````markdown
+## Subtítulo
+
+Texto con **negritas** y fórmulas en línea: $\frac{1}{2} + \frac{1}{4} = \frac{3}{4}$
+
+$$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+
+| Fracción | Decimal |
+|---|---|
+| 1/2 | 0.5 |
+
+> **Recuerda:** una nota destacada.
+
+- Lista de puntos
+1. Lista numerada
+
+![Descripción de la imagen](https://ejemplo.com/imagen.png)
+````
+
+- Las fórmulas usan sintaxis LaTeX (KaTeX): `$...$` en línea, `$$...$$` centrada.
+- El HTML escrito dentro del contenido se muestra como texto y nunca se ejecuta.
+- La lección se marca como completada sola cuando el estudiante llega al final y
+  lleva al menos 8 segundos en ella (`TIEMPO_MINIMO_MS` en `LeccionVista.jsx`).
 
 ## Nota sobre el botón de Google
 

@@ -228,3 +228,28 @@ code { font-size: 0.9em; background: var(--azul-fondo); padding: 1px 4px; border
 }
 @keyframes girar { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
+
+/* ---------- Utilidades compartidas ---------- */
+.error-en-linea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--rojo);
+  background: var(--rojo-fondo);
+  border: 1px solid var(--rojo-borde);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
