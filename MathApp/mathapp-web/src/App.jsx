@@ -6,10 +6,14 @@ import Entrar from "./paginas/Entrar";
 import PantallaCarga from "./componentes/PantallaCarga";
 import Lecciones from "./paginas/Lecciones";
 import PlanEstudio from "./paginas/PlanEstudio";
+import Practicas from "./paginas/Practicas";
 import Proximamente from "./paginas/Proximamente";
 
 // El visor incluye Markdown y KaTeX (fórmulas): se descarga solo al abrir una lección.
 const LeccionVista = lazy(() => import("./paginas/LeccionVista"));
+const ResolverEjercicio = lazy(() => import("./paginas/ResolverEjercicio"));
+const ResolverPrueba = lazy(() => import("./paginas/ResolverPrueba"));
+const Diferido = ({ children, texto }) => <Suspense fallback={<PantallaCarga texto={texto} />}>{children}</Suspense>;
 
 export default function App() {
   return (
@@ -24,10 +28,9 @@ export default function App() {
             path="/lecciones/:id"
             element={<Suspense fallback={<PantallaCarga texto="Cargando lección…" />}><LeccionVista /></Suspense>}
           />
-          <Route
-            path="/practicas"
-            element={<Proximamente titulo="Prácticas" descripcion="Practica con ejercicios y pruebas de cada tema." />}
-          />
+          <Route path="/practicas" element={<Practicas />} />
+          <Route path="/practicas/ejercicios/:id" element={<Diferido texto="Cargando ejercicio…"><ResolverEjercicio /></Diferido>} />
+          <Route path="/practicas/pruebas/:id" element={<Diferido texto="Cargando prueba…"><ResolverPrueba /></Diferido>} />
           <Route path="/plan" element={<PlanEstudio />} />
           <Route
             path="/progreso"

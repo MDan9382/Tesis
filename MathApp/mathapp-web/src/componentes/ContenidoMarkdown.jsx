@@ -17,7 +17,10 @@ function prepararFormulas(texto) {
   return (texto ?? "").replace(/^[ \t]*\$\$(.+?)\$\$[ \t]*$/gm, "$$$$\n$1\n$$$$");
 }
 
-export default function ContenidoMarkdown({ texto }) {
+export default function ContenidoMarkdown({ texto, fraccionesGrandes = false }) {
+  let fuente = prepararFormulas(texto);
+  // En preguntas y opciones, \frac se muestra a tamaño completo (\dfrac) para leerse mejor.
+  if (fraccionesGrandes) fuente = fuente.replace(/\\frac(?=\s*\{)/g, "\\dfrac");
   return (
     <div className="markdown">
       <ReactMarkdown
@@ -31,7 +34,7 @@ export default function ContenidoMarkdown({ texto }) {
           ),
         }}
       >
-        {prepararFormulas(texto)}
+        {fuente}
       </ReactMarkdown>
     </div>
   );

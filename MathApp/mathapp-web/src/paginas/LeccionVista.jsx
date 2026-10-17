@@ -97,7 +97,7 @@ function LeccionCargada({ leccion, tema, ruta, ejercicios }) {
       </div>
 
       {ejercicios.length > 0 && (
-        <Link to="/practicas" className="tarjeta practicar">
+        <Link to={ejercicios.length === 1 ? `/practicas/ejercicios/${ejercicios[0].id}` : "/practicas"} className="tarjeta practicar">
           <span>
             <span className="practicar-titulo">Practica lo aprendido</span>
             <span className="texto-suave">
