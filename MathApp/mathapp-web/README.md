@@ -71,7 +71,11 @@ src/
 │   ├── Entrar.jsx         Inicio de sesión / crear cuenta / recuperar contraseña
 │   ├── PlanEstudio.jsx    Activar planes y ver sus temas y lecciones
 │   ├── Lecciones.jsx      Temas de los planes activos y buscador de lecciones
-│   └── LeccionVista.jsx   Lección en Markdown con fórmulas; se completa al terminarla
+│   ├── LeccionVista.jsx   Lección en Markdown con fórmulas; se completa al terminarla
+│   ├── Practicas.jsx      Ejercicios por lección y pruebas por tema, con mejor puntaje
+│   ├── ResolverEjercicio.jsx  Resolver, calificar y guardar un ejercicio
+│   └── ResolverPrueba.jsx     Prueba con tiempo límite (config.js) y entrega automática
+├── practica/              Formato de preguntas, números al azar y calificación
 │   └── Proximamente.jsx   Lugar temporal de los módulos que faltan
 └── estilos/               Colores y componentes tomados de los prototipos
 ```
@@ -117,6 +121,18 @@ $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
 - El HTML escrito dentro del contenido se muestra como texto y nunca se ejecuta.
 - La lección se marca como completada sola cuando el estudiante llega al final y
   lleva al menos 8 segundos en ella (`TIEMPO_MINIMO_MS` en `LeccionVista.jsx`).
+
+## Ejercicios y pruebas
+
+El formato para escribir preguntas está en [`docs/FORMATO_PREGUNTAS.md`](docs/FORMATO_PREGUNTAS.md).
+Antes de guardar uno en la base de datos, revísalo con:
+
+```bash
+npm run validar -- ruta/al/ejercicio.md
+```
+
+`npm test` ejecuta las pruebas del motor de calificación. El tiempo de las pruebas se
+cambia en `src/config.js` (`TIEMPO_PRUEBA_MINUTOS`).
 
 ## Nota sobre el botón de Google
 
