@@ -1,0 +1,2 @@
+nombre: Aritmética
+descripcion: Unidad 1 del libro: números naturales, enteros y sus operaciones.

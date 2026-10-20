@@ -1,0 +1,2 @@
+nombre: Geometría
+descripcion: Unidad 5 del libro: ángulos, cuadriláteros y triángulos.

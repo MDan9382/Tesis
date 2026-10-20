@@ -1,0 +1,2 @@
+nombre: Álgebra
+descripcion: Unidad 2 del libro: expresiones, ecuaciones, razones y porcentajes.

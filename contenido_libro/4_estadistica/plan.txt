@@ -1,0 +1,2 @@
+nombre: Estadística
+descripcion: Unidad 6 del libro: organización de datos y medidas de tendencia central.
