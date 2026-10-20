@@ -42,9 +42,9 @@ public class TemasController(
 
     /// <summary>Pruebas del tema.</summary>
     [HttpGet("{id:int}/pruebas")]
-    public async Task<ActionResult<List<Prueba>>> Pruebas(int id, [FromQuery] bool? esPrueba, CancellationToken ct)
+    public async Task<ActionResult<List<Prueba>>> Pruebas(int id, CancellationToken ct)
     {
         if (await temas.ObtenerPorIdAsync(id, ct) is null) return NotFound();
-        return await pruebas.ObtenerPorTemaAsync(id, esPrueba, ct);
+        return await pruebas.ObtenerPorTemaAsync(id, ct);
     }
 }

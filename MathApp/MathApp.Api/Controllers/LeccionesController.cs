@@ -25,12 +25,12 @@ public class LeccionesController(
     public async Task<ActionResult<Leccion>> Obtener(int id, CancellationToken ct) =>
         await lecciones.ObtenerPorIdAsync(id, ct) is { } l ? l : NotFound();
 
-    /// <summary>Ejercicios de práctica de la lección.</summary>
+    /// <summary>Ejercicios de la lección.</summary>
     [HttpGet("{id:int}/ejercicios")]
     public async Task<ActionResult<List<Ejercicio>>> Ejercicios(int id, CancellationToken ct)
     {
         if (await lecciones.ObtenerPorIdAsync(id, ct) is null) return NotFound();
-        return await ejercicios.ObtenerPorLeccionAsync(id, esPrueba: null, ct);
+        return await ejercicios.ObtenerPorLeccionAsync(id, ct);
     }
 
     /// <summary>
