@@ -13,9 +13,6 @@ public class Ejercicio
     /// </summary>
     public string? Contenido { get; set; }
 
-    /// <summary>Ejercicio_EsPrueba BOOLEAN NOT NULL DEFAULT FALSE.</summary>
-    public bool EsPrueba { get; set; }
-
     /// <summary>Leccion_Id (FK → Lecciones).</summary>
     public int LeccionId { get; set; }
 }

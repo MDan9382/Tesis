@@ -12,9 +12,6 @@ public class Prueba
     /// <summary>Prueba_Contenido LONGTEXT NULL (Markdown).</summary>
     public string? Contenido { get; set; }
 
-    /// <summary>Prueba_EsPrueba BOOLEAN NOT NULL DEFAULT FALSE.</summary>
-    public bool EsPrueba { get; set; }
-
     /// <summary>Tema_Id (FK → Temas).</summary>
     public int TemaId { get; set; }
 }

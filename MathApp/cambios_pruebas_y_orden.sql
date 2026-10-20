@@ -10,7 +10,6 @@
 CREATE TABLE Pruebas (
     Prueba_Id        INT          NOT NULL AUTO_INCREMENT,
     Prueba_Contenido LONGTEXT     NULL,
-    Prueba_EsPrueba  BOOLEAN      NOT NULL DEFAULT FALSE,
     Tema_Id          INT          NOT NULL,
     CONSTRAINT PK_Pruebas PRIMARY KEY (Prueba_Id),
     CONSTRAINT FK_Pruebas_Temas

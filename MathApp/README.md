@@ -40,7 +40,7 @@ Para que el frontend local pueda llamar a la API, `appsettings.Development.json`
 3. En el mismo proyecto: **+ New → Database → MySQL**.
 4. Crea las tablas: en el servicio MySQL abre la pestaña **Connect**, copia los datos de
    conexión pública y conéctate con MySQL Workbench. Ejecuta en este orden:
-   `Db_Tesis_R.sql`, `sugerencias_bd.sql` y `cambios_pruebas_y_orden.sql`.
+   `Db_Tesis_R.sql`, `sugerencias_bd.sql`, `cambios_pruebas_y_orden.sql` y `quitar_es_prueba.sql`.
 5. En el servicio de la API, pestaña **Variables**, agrega:
 
    | Variable | Valor |
@@ -96,7 +96,7 @@ botón **Authorize**.
 | GET | `/api/planes/{id}/temas` | Temas del plan en orden de ruta |
 | GET | `/api/temas/{id}` | Un tema |
 | GET | `/api/temas/{id}/lecciones` | Ruta del tema: lecciones en orden con `completada` |
-| GET | `/api/temas/{id}/pruebas?esPrueba=` | Pruebas del tema |
+| GET | `/api/temas/{id}/pruebas` | Pruebas del tema |
 | GET | `/api/lecciones/buscar?q=texto` | Búsqueda por nombre (mín. 2 letras) |
 | GET | `/api/lecciones/{id}` | Lección con contenido |
 | GET | `/api/lecciones/{id}/ejercicios` | Ejercicios de la lección |
