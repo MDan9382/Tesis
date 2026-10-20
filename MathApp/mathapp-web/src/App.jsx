@@ -7,7 +7,7 @@ import PantallaCarga from "./componentes/PantallaCarga";
 import Lecciones from "./paginas/Lecciones";
 import PlanEstudio from "./paginas/PlanEstudio";
 import Practicas from "./paginas/Practicas";
-import Proximamente from "./paginas/Proximamente";
+import Progreso from "./paginas/Progreso";
 
 // El visor incluye Markdown y KaTeX (fórmulas): se descarga solo al abrir una lección.
 const LeccionVista = lazy(() => import("./paginas/LeccionVista"));
@@ -32,10 +32,7 @@ export default function App() {
           <Route path="/practicas/ejercicios/:id" element={<Diferido texto="Cargando ejercicio…"><ResolverEjercicio /></Diferido>} />
           <Route path="/practicas/pruebas/:id" element={<Diferido texto="Cargando prueba…"><ResolverPrueba /></Diferido>} />
           <Route path="/plan" element={<PlanEstudio />} />
-          <Route
-            path="/progreso"
-            element={<Proximamente titulo="Progreso y estadísticas" descripcion="Revisa tu avance en el plan de estudio y los ejercicios completados." />}
-          />
+          <Route path="/progreso" element={<Progreso />} />
         </Route>
       </Route>
 

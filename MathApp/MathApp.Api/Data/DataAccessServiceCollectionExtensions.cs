@@ -22,6 +22,7 @@ public static class DataAccessServiceCollectionExtensions
         services.AddScoped<IResultadoEjercicioDao, ResultadoEjercicioDao>();
         services.AddScoped<IPruebaDao, PruebaDao>();
         services.AddScoped<IResultadoPruebaDao, ResultadoPruebaDao>();
+        services.AddScoped<IResumenProgresoDao, ResumenProgresoDao>();
 
         return services;
     }

@@ -74,9 +74,9 @@ src/
 │   ├── LeccionVista.jsx   Lección en Markdown con fórmulas; se completa al terminarla
 │   ├── Practicas.jsx      Ejercicios por lección y pruebas por tema, con mejor puntaje
 │   ├── ResolverEjercicio.jsx  Resolver, calificar y guardar un ejercicio
-│   └── ResolverPrueba.jsx     Prueba con tiempo límite (config.js) y entrega automática
+│   ├── ResolverPrueba.jsx     Prueba con tiempo límite (config.js) y entrega automática
+│   └── Progreso.jsx       Indicadores, avance por plan e historial de intentos
 ├── practica/              Formato de preguntas, números al azar y calificación
-│   └── Proximamente.jsx   Lugar temporal de los módulos que faltan
 └── estilos/               Colores y componentes tomados de los prototipos
 ```
 

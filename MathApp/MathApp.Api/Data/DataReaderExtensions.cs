@@ -32,12 +32,14 @@ internal static class DataReaderExtensions
         return r.IsDBNull(i) ? null : r.GetBoolean(i);
     }
 
+    // Las fechas se guardan en UTC (UTC_TIMESTAMP()). Se marcan como UTC al leerlas para
+    // que el JSON lleve la "Z" y el navegador las convierta a la hora local del estudiante.
     public static DateTime GetDateTime(this DbDataReader r, string columna) =>
-        r.GetDateTime(r.GetOrdinal(columna));
+        DateTime.SpecifyKind(r.GetDateTime(r.GetOrdinal(columna)), DateTimeKind.Utc);
 
     public static DateTime? GetNullableDateTime(this DbDataReader r, string columna)
     {
         var i = r.GetOrdinal(columna);
-        return r.IsDBNull(i) ? null : r.GetDateTime(i);
+        return r.IsDBNull(i) ? null : DateTime.SpecifyKind(r.GetDateTime(i), DateTimeKind.Utc);
     }
 }

@@ -16,7 +16,8 @@ public class UsuarioController(
     IPlanEstudioDao planes,
     IProgresoLeccionDao progreso,
     IResultadoEjercicioDao resultadosEjercicios,
-    IResultadoPruebaDao resultadosPruebas) : ControllerBase
+    IResultadoPruebaDao resultadosPruebas,
+    IResumenProgresoDao resumenProgreso) : ControllerBase
 {
     /// <summary>
     /// Devuelve el usuario actual. El frontend debe llamarlo justo después de
@@ -46,6 +47,20 @@ public class UsuarioController(
             await progreso.ObtenerPorUsuarioAsync(u.Id, ct),
             await resultadosEjercicios.ObtenerPorUsuarioAsync(u.Id, ct),
             await resultadosPruebas.ObtenerPorUsuarioAsync(u.Id, ct));
+    }
+
+    /// <summary>
+    /// Módulo de Progreso: cifras generales, avance de cada plan activo y los
+    /// últimos 200 intentos de ejercicios y pruebas con sus nombres.
+    /// </summary>
+    [HttpGet("progreso")]
+    public async Task<ProgresoUsuario> Progreso(CancellationToken ct)
+    {
+        var u = await usuarioActual.ObtenerAsync(ct);
+        return new ProgresoUsuario(
+            await resumenProgreso.ObtenerTotalesAsync(u.Id, ct),
+            await resumenProgreso.ObtenerAvancePlanesAsync(u.Id, ct),
+            await resumenProgreso.ObtenerHistorialAsync(u.Id, 200, ct));
     }
 
     [HttpGet("planes")]

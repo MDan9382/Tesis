@@ -27,3 +27,9 @@ public record Perfil(
     List<ProgresoLeccion> Lecciones,
     List<ResultadoEjercicio> Ejercicios,
     List<ResultadoPrueba> Pruebas);
+
+/// <summary>Datos de la página de Progreso.</summary>
+public record ProgresoUsuario(
+    TotalesProgreso Totales,
+    List<AvancePlan> Planes,
+    List<ResultadoHistorial> Historial);

@@ -51,13 +51,13 @@ public class ProgresoLeccionDao : DaoBase, IProgresoLeccionDao
         if (existente is not null)
         {
             await EjecutarAsync(
-                "UPDATE Progreso_Lecciones SET PL_Fecha_Completada = CURRENT_TIMESTAMP WHERE PL_Id = @id",
+                "UPDATE Progreso_Lecciones SET PL_Fecha_Completada = UTC_TIMESTAMP() WHERE PL_Id = @id",
                 [("@id", existente.Id)], ct);
             return existente.Id;
         }
 
         return await InsertarYObtenerIdAsync(
-            "INSERT INTO Progreso_Lecciones (PL_Fecha_Completada, Usuario_Id, Leccion_Id) VALUES (CURRENT_TIMESTAMP, @usuarioId, @leccionId)",
+            "INSERT INTO Progreso_Lecciones (PL_Fecha_Completada, Usuario_Id, Leccion_Id) VALUES (UTC_TIMESTAMP(), @usuarioId, @leccionId)",
             [("@usuarioId", usuarioId), ("@leccionId", leccionId)], ct);
     }
 
