@@ -51,7 +51,7 @@ public class ResultadoPruebaDao : DaoBase, IResultadoPruebaDao
         resultado.Id = await InsertarYObtenerIdAsync(
             """
             INSERT INTO Resultados_Pruebas (RP_Puntaje, RP_Fecha_Completado, Prueba_Id, Usuario_Id)
-            VALUES (@puntaje, COALESCE(@fecha, CURRENT_TIMESTAMP), @pruebaId, @usuarioId)
+            VALUES (@puntaje, COALESCE(@fecha, UTC_TIMESTAMP()), @pruebaId, @usuarioId)
             """,
             [("@puntaje", resultado.Puntaje), ("@fecha", resultado.FechaCompletado),
              ("@pruebaId", resultado.PruebaId), ("@usuarioId", resultado.UsuarioId)], ct);

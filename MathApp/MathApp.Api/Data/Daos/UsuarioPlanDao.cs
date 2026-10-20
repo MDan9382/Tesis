@@ -51,13 +51,13 @@ public class UsuarioPlanDao : DaoBase, IUsuarioPlanDao
         if (existente is not null)
         {
             await EjecutarAsync(
-                "UPDATE Usuario_Planes SET UP_Activo = TRUE, UP_Fecha_Activacion = CURRENT_TIMESTAMP WHERE UP_Id = @id",
+                "UPDATE Usuario_Planes SET UP_Activo = TRUE, UP_Fecha_Activacion = UTC_TIMESTAMP() WHERE UP_Id = @id",
                 [("@id", existente.Id)], ct);
             return existente.Id;
         }
 
         return await InsertarYObtenerIdAsync(
-            "INSERT INTO Usuario_Planes (Usuario_Id, Plan_Id) VALUES (@usuarioId, @planId)",
+            "INSERT INTO Usuario_Planes (Usuario_Id, Plan_Id, UP_Fecha_Activacion) VALUES (@usuarioId, @planId, UTC_TIMESTAMP())",
             [("@usuarioId", usuarioId), ("@planId", planId)], ct);
     }
 

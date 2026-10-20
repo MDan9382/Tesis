@@ -1,0 +1,80 @@
+/* Módulo de Progreso — basado en el prototipo */
+.seccion { margin-bottom: 28px; }
+
+/* Fila de indicadores (stat tiles) */
+.indicadores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
+.indicador {
+  background: #fff;
+  border: 1px solid var(--azul-borde);
+  border-radius: var(--radio);
+  padding: 14px 16px;
+  box-shadow: var(--sombra);
+  min-width: 0;
+}
+.indicador-etiqueta { font-size: 12px; color: var(--gris-texto); margin-bottom: 4px; }
+.indicador-valor { font-size: 28px; font-weight: 600; color: var(--azul-titulo); letter-spacing: -0.02em; line-height: 1.1; }
+.indicador-sufijo { font-size: 14px; font-weight: 500; color: var(--gris-suave); margin-left: 2px; }
+@media (max-width: 480px) {
+  .indicadores { gap: 8px; }
+  .indicador { padding: 12px; }
+  .indicador-etiqueta { font-size: 11px; }
+  .indicador-valor { font-size: 22px; }
+}
+
+/* Barras de avance por plan (medidor: el fondo es un tono claro del mismo verde) */
+.avance-plan + .avance-plan { margin-top: 20px; }
+.plan-label { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+.avance-nombre { font-size: 14px; font-weight: 600; color: var(--azul-fuerte); }
+.avance-pct { font-size: 13px; font-weight: 600; color: var(--azul-titulo); }
+.barra-fondo { width: 100%; height: 12px; background: #DCFCE7; border-radius: 100px; overflow: hidden; }
+.barra-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--verde-claro), var(--verde));
+  transition: width 0.6s ease;
+}
+.avance-detalle { font-size: 12px; color: var(--gris-texto); margin-top: 6px; }
+@media (prefers-reduced-motion: reduce) { .barra-fill { transition: none; } }
+
+/* Historial */
+.ejercicios-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.ejercicios-header .seccion-titulo { margin-bottom: 0; }
+.selector-orden select {
+  appearance: none;
+  background: var(--azul-fondo) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%231D4ED8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 10px center;
+  border: 1px solid var(--azul-borde-2);
+  border-radius: 7px;
+  padding: 6px 32px 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--azul-nav);
+  cursor: pointer;
+}
+.selector-orden select:hover { background-color: var(--azul-borde); }
+
+.lista-historial { list-style: none; }
+.ejercicio-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 8px;
+  margin: 0 -8px;
+  border-bottom: 1px solid #F1F5FE;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.ejercicio-item:hover { background: var(--fondo); }
+.lista-historial li:first-child .ejercicio-item { padding-top: 4px; }
+.lista-historial li:last-child .ejercicio-item { border-bottom: none; padding-bottom: 4px; }
+.ejercicio-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.ejercicio-nombre { font-size: 14px; font-weight: 500; color: var(--azul-titulo); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ejercicio-item:hover .ejercicio-nombre { color: var(--azul); }
+.ejercicio-meta { font-size: 12px; color: var(--gris-suave); display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.etiqueta-tipo { font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 100px; background: var(--azul-fondo); color: var(--azul); }
+.etiqueta-tipo.prueba { background: #EEF2FF; color: #4338CA; }
+.ver-mas { margin-top: 12px; }
+
+.esqueleto-progreso { height: 360px; border-radius: var(--radio); background: linear-gradient(90deg, #fff 0%, var(--azul-fondo) 50%, #fff 100%); background-size: 200% 100%; animation: brillo 1.4s ease-in-out infinite; }
+@keyframes brillo { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@media (prefers-reduced-motion: reduce) { .esqueleto-progreso { animation: none; } }

@@ -88,6 +88,7 @@ botón **Authorize**.
 | GET | `/api/yo` | Usuario actual (lo registra la primera vez) |
 | PUT | `/api/yo/nombre` | Cambiar nombre `{ "nombre": "Ana" }` |
 | GET | `/api/yo/perfil` | Planes activos, lecciones completadas y resultados |
+| GET | `/api/yo/progreso` | Totales, avance (%) de cada plan activo y últimos 200 intentos con nombres |
 | GET | `/api/yo/planes?soloActivos=true` | Planes del usuario |
 | POST / DELETE | `/api/yo/planes/{planId}` | Activar / desactivar un plan |
 | GET | `/api/planes` | Planes de estudio |
@@ -117,6 +118,8 @@ Respuestas de error: 401 sin token o token inválido, 404 si el recurso no exist
   dependientes → 409, registro duplicado → 409, referencia a un Id inexistente → 400,
   cualquier otro → 500 (registrado en el log, sin mostrar detalles internos al cliente).
 - `UP_Activo` en NULL se interpreta como `false` (inactivo).
+- Las fechas se guardan en **UTC** (`UTC_TIMESTAMP()`) y la API las envía con la `Z` final;
+  el navegador las muestra en la hora local del estudiante.
 - Temas y lecciones se devuelven en el orden de la ruta (`Orden`, y el Id como desempate).
 - Las pruebas (`PruebaDao`) y sus resultados (`ResultadoPruebaDao`) funcionan igual que
   los ejercicios: cada intento es una fila nueva en `Resultados_Pruebas`.
