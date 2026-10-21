@@ -5,7 +5,7 @@
 
 -- 1) Un solo registro de progreso por usuario y lección, y un solo
 --    registro por usuario y plan. Evita duplicados si llegan dos
---    peticiones al mismo tiempo (doble clic, reintentos de red).
+--    peticiones al mismo tiempo (doble clic, reintentos de red)
 ALTER TABLE Progreso_Lecciones
     ADD CONSTRAINT UQ_Progreso_Usuario_Leccion UNIQUE (Usuario_Id, Leccion_Id);
 
