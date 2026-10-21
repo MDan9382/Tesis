@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api/cliente";
+import { useAuth } from "../auth/AuthContext";
 import { useCarga } from "../api/useCarga";
 import Anillo from "../componentes/Anillo";
 import EncabezadoPagina from "../componentes/EncabezadoPagina";
@@ -23,10 +24,13 @@ export default function Progreso() {
 
   return (
     <>
-      <EncabezadoPagina
-        titulo="Progreso y estadísticas"
-        descripcion="Revisa tu avance en el plan de estudio y los ejercicios completados."
-      />
+      <div className="progreso-cabecera">
+        <EncabezadoPagina
+          titulo="Progreso y estadísticas"
+          descripcion="Revisa tu avance en el plan de estudio y los ejercicios completados."
+        />
+        {datos && <BotonReporte progreso={datos} />}
+      </div>
       {error && <ErrorEnLinea mensaje={error.message} onReintentar={recargar} />}
       {!error && !datos && <div className="esqueleto-progreso" aria-hidden="true" />}
       {datos && (
@@ -37,6 +41,46 @@ export default function Progreso() {
         </>
       )}
     </>
+  );
+}
+
+/** Descarga el reporte en PDF con los mismos datos que muestra la página. */
+function BotonReporte({ progreso }) {
+  const { usuario, cuentaFirebase } = useAuth();
+  const [estado, setEstado] = useState("listo"); // listo | generando | error
+
+  async function generar() {
+    setEstado("generando");
+    try {
+      const { descargarReporte } = await import("../progreso/reportePdf");
+      await descargarReporte(progreso, {
+        nombre: usuario?.nombre || cuentaFirebase?.displayName || "",
+        correo: cuentaFirebase?.email || "",
+      });
+      setEstado("listo");
+    } catch (e) {
+      console.error(e);
+      setEstado("error");
+    }
+  }
+
+  return (
+    <div className="reporte-accion">
+      <button type="button" className="boton boton-secundario" onClick={generar} disabled={estado === "generando"}>
+        <IconoDescarga />
+        {estado === "generando" ? "Generando…" : "Descargar reporte PDF"}
+      </button>
+      {estado === "error" && <p className="reporte-error" role="alert">No se pudo generar el reporte. Intenta de nuevo.</p>}
+    </div>
+  );
+}
+
+function IconoDescarga() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"
+      strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 3v12" /><polyline points="7 10 12 15 17 10" /><path d="M5 21h14" />
+    </svg>
   );
 }
 
